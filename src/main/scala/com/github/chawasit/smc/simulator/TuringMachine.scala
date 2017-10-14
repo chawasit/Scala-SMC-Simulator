@@ -167,6 +167,7 @@ object TuringMachine {
 
   private def storeInstructions(memory: Array[Int], instructions: Array[Int]): Unit =
     instructions.zipWithIndex.foreach { case (instruction, address) =>
+      println(s"memory[$address]=$instruction")
       memory(address) = instruction
     }
 }

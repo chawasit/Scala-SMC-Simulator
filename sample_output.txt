@@ -1,3 +1,13 @@
+memory[0]=8454151
+memory[1]=9043971
+memory[2]=655361
+memory[3]=16842754
+memory[4]=16842749
+memory[5]=29360128
+memory[6]=25165824
+memory[7]=5
+memory[8]=-1
+memory[9]=2
 
 @@@
 state:
