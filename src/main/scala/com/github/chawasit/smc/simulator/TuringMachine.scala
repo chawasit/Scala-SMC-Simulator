@@ -116,7 +116,7 @@ case class TuringMachine(programCounter: Int
   private def increaseProgramCounter: TuringMachine = copy(programCounter = programCounter + 1)
 
   private def jumpToAddress(address: Int): TuringMachine = TryWith(
-    Guard(isValidMemoryAddress(address), new ProgramCounterOutOfBoundException(address))
+    Guard(isValidProgramCounter(address), new ProgramCounterOutOfBoundException(address))
   ) {
     copy(programCounter = address)
   }
@@ -148,6 +148,8 @@ case class TuringMachine(programCounter: Int
   private def isValidMemoryAddress(address: Int): Boolean = 0 <= address && address < MAX_MEMORY_ADDRESS
 
   private def isValidRegisterAddress(address: Int): Boolean = 0 <= address && address < MAX_REGISTER_ADDRESS
+
+  private def isValidProgramCounter(address: Int): Boolean = 0 <= address && address < instructionCount
 }
 
 
