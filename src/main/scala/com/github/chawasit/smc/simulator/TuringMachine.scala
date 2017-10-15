@@ -54,49 +54,39 @@ case class TuringMachine(programCounter: Int
   }
 
   private def add: TuringMachine = {
-    val a = loadFromRegister(rs)
-    val b = loadFromRegister(rt)
-    val sum = a + b
+    val sum = regA + regB
 
     storeToRegister(rd, sum) nextCycle
   }
 
   private def nand: TuringMachine = {
-    val a = loadFromRegister(rs)
-    val b = loadFromRegister(rt)
-    val nand = ~(a & b)
+    val nand = ~(regA & regB)
 
     storeToRegister(rd, nand) nextCycle
   }
 
   private def loadWord: TuringMachine = {
-    val baseAddress = loadFromRegister(rs)
-    val address = baseAddress + offset
+    val address = regA + offset
     val value = loadFromMemory(address)
 
     storeToRegister(rt, value) nextCycle
   }
 
   private def storeWord: TuringMachine = {
-    val a = loadFromRegister(rs)
-    val address = a + offset
-    val b = loadFromMemory(rt)
+    val address = regA + offset
 
-    storeToMemory(address, b) nextCycle
+    storeToMemory(address, regB) nextCycle
   }
 
   private def branchOnEqual: TuringMachine = {
-    val a = loadFromRegister(rs)
-    val b = loadFromRegister(rt)
-
-    a == b match {
+    regA == regB match {
       case true => jumpToAddress(programCounter + offset) nextCycle
       case false => nextCycle
     }
   }
 
   private def jumpRegisterAndLink: TuringMachine = {
-    val address = loadFromRegister(rs)
+    val address = regA
 
     storeToRegister(rt, programCounter) jumpToAddress address nextCycle
   }
@@ -110,6 +100,9 @@ case class TuringMachine(programCounter: Int
   private lazy val rt = (instructionRegister >>> 16) & 7
   private lazy val rd = instructionRegister & 0x7
   private lazy val offset = (instructionRegister << 16) >> 16
+
+  private lazy val regA = loadFromRegister(rs)
+  private lazy val regB = loadFromRegister(rt)
 
   private def currentInstruction: Int = memory(programCounter)
 
