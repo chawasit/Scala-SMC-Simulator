@@ -46,7 +46,7 @@ case class TuringMachine(programCounter: Int
       case 2 => loadWord
       case 3 => storeWord
       case 4 => branchOnEqual
-      case 5 => jumpRegisterAndLink
+      case 5 => jumpAndLinkRegister
       case 6 => halt
       case 7 => noop
       case _ => throw new UnknownOpcodeException(instructionRegister)
@@ -85,7 +85,7 @@ case class TuringMachine(programCounter: Int
     }
   }
 
-  private def jumpRegisterAndLink: TuringMachine = {
+  private def jumpAndLinkRegister: TuringMachine = {
     val address = regA
 
     storeToRegister(rt, programCounter) jumpToAddress address nextCycle
