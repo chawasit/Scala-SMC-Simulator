@@ -158,6 +158,7 @@ object TuringMachine {
       , registers = new Array[Int](MAX_REGISTER_ADDRESS)
       , instructionCount = instructions.length)
   }
+  
 
   private def storeInstructions(memory: Array[Int], instructions: List[Int]): Array[Int] = {
     def iterator(memory: Array[Int], instructions: List[Int], address: Int): Array[Int] =
