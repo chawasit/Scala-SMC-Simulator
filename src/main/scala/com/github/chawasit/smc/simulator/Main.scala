@@ -9,10 +9,7 @@ object Main extends App {
     val arguments = new ArgumentConfiguration(args)
 
     try {
-      val input = readFile(arguments.input())
-      val instructions = input map {
-        _.toInt
-      }
+      val instructions = readFile(arguments.input())
       val turingMachine = TuringMachine(instructions)
 
       val haltedTuringMachine = turingMachine run
@@ -33,10 +30,11 @@ object Main extends App {
     writer.close()
   }
 
-  private def readFile(path: String): Array[String] =
+  private def readFile(path: String): List[Int] =
     Source.fromFile(path)
       .getLines()
-      .toArray
+      .toList
+      .map { _.toInt }
 }
 
 

@@ -147,22 +147,26 @@ case class TuringMachine(programCounter: Int
 
 
 object TuringMachine {
-  def apply(instructions: Array[Int]): TuringMachine = {
+  def apply(instructions: List[Int]): TuringMachine = {
     val memory = new Array[Int](MAX_MEMORY_ADDRESS)
-
-    storeInstructions(memory, instructions)
+    val memoryWithInstruction = storeInstructions(memory, instructions)
 
     TuringMachine(
       programCounter = 0
-      , memory = memory
+      , memory = memoryWithInstruction
       , instructionRegister = 0
       , registers = new Array[Int](MAX_REGISTER_ADDRESS)
       , instructionCount = instructions.length)
   }
 
-  private def storeInstructions(memory: Array[Int], instructions: Array[Int]): Unit =
-    instructions.zipWithIndex.foreach { case (instruction, address) =>
-      println(s"memory[$address]=$instruction")
-      memory(address) = instruction
-    }
+  private def storeInstructions(memory: Array[Int], instructions: List[Int]): Array[Int] = {
+    def iterator(memory: Array[Int], instructions: List[Int], address: Int): Array[Int] =
+      instructions match {
+        case instruction :: remainingInstruction =>
+          iterator(memory.updated(address, instruction), remainingInstruction, address + 1)
+        case List() => memory
+      }
+
+    iterator(memory, instructions, 0)
+  }
 }
