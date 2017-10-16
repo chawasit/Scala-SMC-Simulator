@@ -33,11 +33,7 @@ case class TuringMachine(programCounter: Int
     fetch decodeAndExecute
   }
 
-  private def fetch: TuringMachine =
-    copy(
-      programCounter = programCounter + 1
-      , instructionRegister = loadFromMemory(programCounter)
-    )
+  private def fetch: TuringMachine = loadInstruction increaseProgramCounter
 
   private def decodeAndExecute: TuringMachine = {
     opcode match {
@@ -104,7 +100,11 @@ case class TuringMachine(programCounter: Int
   private lazy val regA = loadFromRegister(rs)
   private lazy val regB = loadFromRegister(rt)
 
-  private def currentInstruction: Int = memory(programCounter)
+  private def loadInstruction: TuringMachine = TryWith(
+    Guard(isValidProgramCounter(programCounter), new ProgramCounterOutOfBoundException(programCounter))
+  ){
+    copy(instructionRegister = memory(programCounter))
+  }
 
   private def increaseProgramCounter: TuringMachine = copy(programCounter = programCounter + 1)
 
@@ -158,7 +158,7 @@ object TuringMachine {
       , registers = new Array[Int](MAX_REGISTER_ADDRESS)
       , instructionCount = instructions.length)
   }
-  
+
 
   private def storeInstructions(memory: Array[Int], instructions: List[Int]): Array[Int] = {
     def iterator(memory: Array[Int], instructions: List[Int], address: Int): Array[Int] =
